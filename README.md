@@ -1,2 +1,2 @@
 # Investment-Lab
-Dumping ground for investment strategies and ideas
+Dumping ground for investment strategies, ideas and useful code snippets.
