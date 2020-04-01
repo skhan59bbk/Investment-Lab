@@ -26,7 +26,7 @@ def create_dataset(n, variance, step=2, corr=False):
 
 def data_from_quandl(ticker):
 
-    key = "hm8hEsEo4aE6iE_yTGjw"
+    key = "ADD KEY HERE"
     data = quandl.get(ticker, api_key=key)
     returns = data['Last'].pct_change(periods=1)[-1000:]
 
