@@ -8,7 +8,7 @@ file = 'C://Users//samee//Documents//Datasets//EOD-AAPL.csv'
 df = pd.read_csv(file)
 df = df[['Date', 'Adj_Open', 'Adj_High', 'Adj_Low', 'Adj_Close', 'Adj_Volume']]
 df = df.rename(columns={'Adj_Open':'Open', 'Adj_High':'High', 'Adj_Low':'Low', 'Adj_Close':'Close', 'Adj_Volume':'Volume'})
-#df = df.set_index('Date')
+df = df.set_index('Date')
 
 #print(df.head())
 
@@ -19,7 +19,11 @@ def sma(series, periods):
 
     return df['sma_'+str(periods)]
 
+
 def ema(series, periods):
+
+    df.reset_index(inplace=True)
+    
     multiplier = 2 / (periods + 1)
 
     conditions = [(df.index < periods), (df.index >= periods)]
@@ -30,7 +34,6 @@ def ema(series, periods):
     for i in range(periods, len(df)):
         df['ema_'+str(periods)].loc[i] = (df['Close'].loc[i] * multiplier) + (df['ema_'+str(periods)].loc[i-1] * (1 - multiplier))
     
-    #print(df['ema_'+str(periods)].head(30))
     return df['ema_'+str(periods)]
     
     
@@ -39,9 +42,10 @@ def rsi(periods):
 
 
 def macd(fast, slow, signal):
+
     df['macd'] = sma('Close', fast) - sma('Close', slow)
     df['macd_signal'] = df['macd'].rolling(window=signal).mean()
-    #print(df.head(20))
+
     return df[['macd', 'macd_signal']]
 
 
@@ -53,6 +57,8 @@ def macd(fast, slow, signal):
 
 #print(df.tail(20))
 
+#df = df.set_index('Date')
 df.Close.plot()
-ema('Close', 15).plot()
+ema('Close', 50).plot()
+sma('Close', 50).plot()
 plt.show()
