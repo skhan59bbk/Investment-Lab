@@ -1,6 +1,10 @@
 import pandas as pd
 import matplotlib.pyplot as plt
+from matplotlib import style
+#from mplfinance import candlestick_ohlc2
+from matplotlib.dates import DateFormatter
 import numpy as np
+style.use('ggplot')
 
 
 file = 'C://Users//samee//Documents//Datasets//EOD-AAPL.csv'
@@ -9,8 +13,6 @@ df = pd.read_csv(file)
 df = df[['Date', 'Adj_Open', 'Adj_High', 'Adj_Low', 'Adj_Close', 'Adj_Volume']]
 df = df.rename(columns={'Adj_Open':'Open', 'Adj_High':'High', 'Adj_Low':'Low', 'Adj_Close':'Close', 'Adj_Volume':'Volume'})
 #df = df.set_index('Date')
-
-#print(df.head())
 
 
 def sma(series, periods):
@@ -80,3 +82,21 @@ def macd(fast, slow, signal):
 ##sma('Close', 50).plot()
 ##plt.show()
 
+#df.reset_index(inplace=True)
+#df['Date'] = df['Date'].map(mdates.date2num)
+#print(df.head())
+
+ax1 = plt.subplot2grid((7,1), (0,0), rowspan=6, colspan=1)
+ax2 = plt.subplot2grid((7,1), (6,0), rowspan=1, colspan=1, sharex=ax1)
+
+ax1.plot(df.index, df['Close'])
+ax1.plot(df.index, sma('Close', 50))
+ax1.plot(df.index, sma('Close', 200))
+#ax2.bar(df.index, df['Volume'])
+ax2.plot(df.index, rsi(14))
+
+
+ax1.xaxis.set_major_locator(plt.MaxNLocator(10))
+ax2.xaxis.set_major_locator(plt.MaxNLocator(10))
+
+plt.show()
